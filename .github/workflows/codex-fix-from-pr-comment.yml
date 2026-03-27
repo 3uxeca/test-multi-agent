@@ -1,0 +1,144 @@
+name: Codex Fix From PR Comment
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  codex-fix:
+    if: >
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '/codex-fix')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get PR info
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const pr = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: issue_number
+            });
+
+            core.setOutput('head_ref', pr.data.head.ref);
+            core.setOutput('head_sha', pr.data.head.sha);
+            core.setOutput('base_ref', pr.data.base.ref);
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ steps.pr.outputs.head_ref }}
+          fetch-depth: 0
+
+      - name: Fetch full refs
+        run: |
+          git fetch --no-tags origin \
+            ${{ steps.pr.outputs.base_ref }} \
+            ${{ steps.pr.outputs.head_ref }}
+
+      - name: Collect PR comments
+        id: comments
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const issueComments = await github.paginate(
+              github.rest.issues.listComments,
+              { owner, repo, issue_number, per_page: 100 }
+            );
+
+            const reviewComments = await github.paginate(
+              github.rest.pulls.listReviewComments,
+              { owner, repo, pull_number: issue_number, per_page: 100 }
+            );
+
+            const body = [
+              '# Issue Comments',
+              ...issueComments.map(c => `## ${c.user.login}\n${c.body}`),
+              '',
+              '# Review Comments',
+              ...reviewComments.map(c => `## ${c.user.login} on ${c.path}:${c.line ?? 'n/a'}\n${c.body}`)
+            ].join('\n\n');
+
+            require('fs').writeFileSync('pr-comments.md', body);
+            core.setOutput('saved', 'true');
+
+      - name: Run Codex fix
+        id: run_codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt: |
+            Follow AGENTS.md.
+            Follow docs/qa/workflow.md.
+            Follow docs/git/workflow.md.
+            Follow docs/review/workflow.md.
+
+            모든 결과는 한국어로 작성해.
+
+            현재 브랜치는 열린 PR의 head 브랜치다.
+            저장소의 최신 상태와 pr-comments.md를 읽고,
+            최신 PR 리뷰/댓글에서 요구한 수정만 최소 범위로 반영해.
+
+            작업 규칙:
+            - review/workflow.md의 분류 기준을 따른다
+            - 문서와 구현 정합성을 유지한다
+            - 불필요한 리팩토링 금지
+            - 변경 후 아래를 실행해 통과시켜라:
+              - npm install --prefix frontend
+              - npm run lint --prefix frontend
+              - npm run build --prefix frontend
+
+            성공하면 필요한 파일만 수정하고 종료해.
+          output-file: codex-output.md
+          safety-strategy: drop-sudo
+          sandbox: workspace-write
+
+      - name: Commit and push changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "codex-fix-bot"
+          git config user.email "codex-fix-bot@users.noreply.github.com"
+          git add .
+          git commit -m "fix: PR 리뷰 반영 자동 수정"
+          git push origin HEAD:${{ steps.pr.outputs.head_ref }}
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body: [
+                '자동 수정이 완료되었습니다.',
+                '',
+                '- 최신 PR 리뷰/댓글을 반영해 수정했습니다.',
+                '- 같은 브랜치에 push 했습니다.',
+                '- 필요하면 아래로 재검토를 요청하세요.',
+                '',
+                '@codex review',
+                '',
+                '이전 리뷰 반영 후 재검토 부탁해.'
+              ].join('\n')
+            });

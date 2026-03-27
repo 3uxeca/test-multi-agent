@@ -1,62 +1,74 @@
-# Design System
+# 디자인 시스템
 
-## Intent
-The design system supports a public airport guidance screen with fast readability, strong hierarchy, and predictable behavior in both light and dark mode.
+## 의도
+이 디자인 시스템은 공항 출발 대기시간 안내 화면에 맞춘다. 핵심 목표는 빠른 판독성, 강한 정보 위계, 그리고 라이트/다크 모드 모두에서 일관된 가독성이다.
 
-## Color Tokens
+## 색상 토큰
 
-### Light Mode
-- `bg-surface`: warm white
-- `bg-card`: off-white
-- `text-primary`: near-black
-- `text-secondary`: muted gray
-- `border-subtle`: light neutral
+### 라이트 모드
+- `bg-surface`: 따뜻한 백색 계열 바탕
+- `bg-card`: 표면이 살짝 구분되는 밝은 카드
+- `text-primary`: 거의 검정에 가까운 본문
+- `text-secondary`: 보조 설명용 중간 회색
+- `border-subtle`: 눈에 거슬리지 않는 옅은 경계선
 
-### Dark Mode
-- `bg-surface`: deep charcoal
-- `bg-card`: slightly raised charcoal
-- `text-primary`: near-white
-- `text-secondary`: muted slate
-- `border-subtle`: low-contrast neutral
+### 다크 모드
+- `bg-surface`: 깊은 차콜 계열 바탕
+- `bg-card`: 바탕보다 약간 떠 보이는 카드
+- `text-primary`: 밝은 흰색 계열 본문
+- `text-secondary`: 무채색에 가까운 보조 텍스트
+- `border-subtle`: 낮은 대비의 경계선
 
-### Status Colors
-- `status-good`: green for normal flow
-- `status-caution`: amber for elevated wait time
-- `status-bad`: red for disruption or crowding
-- `status-neutral`: blue or slate for informational states
+### 상태 색상
+- `status-good`: 정상 흐름
+- `status-caution`: 대기시간 증가
+- `status-bad`: 지연 또는 혼잡
+- `status-neutral`: 정보성 상태
 
-## Typography
-- Use a highly readable sans-serif system with strong numeral clarity.
-- Keep the wait-time value visually dominant.
-- Use short labels in medium weight.
-- Avoid dense paragraph text in the main view.
+## 타이포그래피
+- 한국어 본문은 과한 자간을 피하고, 줄 길이를 짧게 유지한다.
+- 대기시간 숫자는 가장 큰 요소로 둔다.
+- 페이지 제목, 공항명, 상태 배지, 체크포인트 제목은 서로 다른 크기와 무게를 가져야 한다.
+- 본문은 `17px` 안팎의 크기와 충분한 행간을 우선한다.
+- 메인 화면에서는 장문의 설명보다 짧은 문장 구조를 사용한다.
+- 한국어 제목과 라벨은 영문 기준 자간을 그대로 적용하지 말고, 자연스러운 한국어 밀도를 우선한다.
+- 공항명과 대기시간 숫자는 가장 강한 대비를 가져야 한다.
+- 권장 위계는 페이지 제목 > 대기시간 숫자 > 공항명 > 상태 배지 > 섹션 제목 > 본문 설명 순서다.
+- 한국어 라벨은 필요 이상으로 대문자 스타일을 흉내 내지 않는다.
+- 숫자와 약어는 선명하게, 문장형 설명은 보다 낮은 대비와 낮은 밀도로 배치한다.
 
-## Spacing
-- Base spacing scale: `4`, `8`, `12`, `16`, `24`, `32`.
-- Use larger outer padding on desktop and tighter density on mobile.
-- Keep vertical rhythm consistent across cards and state panels.
+## 간격
+- 기본 간격 단위는 `4`, `8`, `12`, `16`, `24`, `32`를 사용한다.
+- 모바일은 카드 간격을 넓게, 태블릿과 데스크톱은 블록 내부 여백을 충분히 둔다.
+- 히어로 카드, 보조 카드, 체크포인트 카드 사이의 간격은 시각적 우선순위를 드러내야 한다.
+- 데스크톱에서는 히어로 카드가 넉넉하게 숨 쉴 수 있어야 하며, 체크포인트 카드는 그보다 압축된 밀도를 유지한다.
+- 상단 조작 영역은 compact 하게 유지하고, 메인 콘텐츠 영역에 여백을 우선 배분한다.
 
-## Radius and Borders
-- Use medium-radius cards and controls for a calm, functional feel.
-- Use borders sparingly in light mode and even more sparingly in dark mode.
-- Prefer surface separation through spacing and tonal contrast when possible.
+## 모서리와 경계
+- 중간 정도의 라운드를 사용해 기능적인 인상을 유지한다.
+- 라이트 모드에서는 경계선이 더 잘 보이되 과하지 않아야 한다.
+- 다크 모드에서는 경계선보다 표면 톤 차이를 우선한다.
 
-## Elevation
-- Use minimal shadow.
-- Rely on subtle surface contrast rather than heavy depth effects.
-- The main wait-time card may receive the strongest elevation signal.
+## 입체감
+- 그림자는 최소화한다.
+- 깊은 그림자보다 표면 대비와 면적 차이를 사용한다.
+- 메인 대기시간 카드만 가장 강한 강조를 받을 수 있다.
 
-## Breakpoints
-- `mobile`: up to small handset widths.
-- `tablet`: medium widths with room for secondary content.
-- `desktop`: wide layouts with a central hero and supporting rail.
+## 브레이크포인트
+- `mobile`: 작은 스마트폰 폭
+- `tablet`: 보조 정보까지 함께 담을 수 있는 중간 폭
+- `desktop`: 좌측 히어로와 우측 보조 패널이 분리되는 넓은 폭
+- `desktop`에서는 상단 조작보다 메인 히어로가 먼저 읽혀야 한다.
+- `desktop`에서는 공항 선택과 대기시간 카드가 먼저 보이고, 체크포인트 패널은 그보다 한 단계 뒤에 읽혀야 한다.
 
-## Theme Switching Rules
-- Theme state must not alter layout structure.
-- Component colors should come from tokens rather than local hardcoded values.
-- Status treatment must remain readable in both themes.
+## 테마 전환 규칙
+- 테마는 레이아웃 구조를 바꾸지 않는다.
+- 색상은 하드코딩하지 않고 토큰에서 가져온다.
+- 상태 배지와 본문 텍스트는 두 테마 모두에서 읽기 쉬워야 한다.
 
-## Accessibility Baseline
-- Maintain WCAG-conscious contrast for text and status indicators.
-- Do not use color alone for meaning.
-- Preserve legible font sizes at distance and on small screens.
+## 접근성 기준
+- 텍스트와 상태 색상은 WCAG를 의식한 대비를 유지한다.
+- 색상만으로 의미를 전달하지 않는다.
+- 작은 화면과 먼 거리 모두에서 숫자가 우선 읽혀야 한다.
+- 한국어 줄바꿈이 발생해도 정보 위계가 무너지지 않아야 한다.
+- 한국어 문장 길이가 길어질 수 있으므로, 줄바꿈 후에도 제목과 값의 시각적 중심이 유지되어야 한다.

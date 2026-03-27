@@ -1,111 +1,209 @@
-# Product Requirements
+# 제품 요구사항
 
-## 1. Product Summary
-Gimpo / Gimhae International Departure Wait Time Guidance Service provides travelers with a clear, live view of airport departure congestion so they can decide when to arrive and how to navigate the airport.
+## 1. 제품 개요
+김포국제공항(`GMP`)과 김해국제공항(`PUS`)의 출발 대기시간을 한눈에 안내하는 공항 출발 대기시간 대시보드다.
 
-## 2. Product Goals
-- Show current departure wait-time guidance with minimal effort.
-- Support both `GMP` and `PUS` with airport-specific data and labels.
-- Support multilingual UI for domestic and international travelers.
-- Make operational status visible at a glance.
-- Work reliably on mobile, tablet, and desktop, with dark and light themes.
+이 서비스는 여행자가 공항에 얼마나 일찍 도착해야 하는지 빠르게 판단하도록 돕고, 운영 상태와 대기시간의 최신성을 명확하게 보여주는 것을 목표로 한다.
 
-## 3. Non-Goals
-- No trip planning, ticketing, or booking features.
-- No airport navigation map in MVP.
-- No personalized account, login, or saved preferences in MVP.
-- No complex analytics dashboard for end users.
+## 2. 제품 목적
+- 현재 출발 대기시간을 최소한의 조작으로 확인할 수 있게 한다.
+- `GMP`와 `PUS`를 동일한 화면 구조 안에서 지원하되, 공항별 차이는 데이터로만 처리한다.
+- 한국어를 기본으로 두고 영어를 보조 로캘로 제공한다.
+- 다크모드와 라이트모드를 모두 지원해 다양한 조명 환경에서 읽기 쉽게 한다.
+- 모바일, 태블릿, 데스크톱에서 같은 정보 위계를 유지하며 반응형으로 동작하게 한다.
+- 운영 상태, 최신성, 오류 상태를 즉시 인지할 수 있게 한다.
 
-## 4. Primary Users
-- Departing passengers checking how early to arrive.
-- Airport visitors comparing congestion before leaving home.
-- Staff and operations users monitoring the current service state.
+### 2.1 제품 판단 기준
+- 첫 화면에서 사용자는 현재 공항, 현재 대기시간, 운영 상태를 즉시 이해해야 한다.
+- 공항별 차이는 같은 레이아웃 안에서 콘텐츠 차이로만 드러나야 한다.
+- 한국어 화면은 기본 사용 시나리오로 보고, 영어는 보조 전환 시나리오로 본다.
+- 데스크톱에서는 히어로 영역이 가장 먼저 시선을 받도록 하고, 보조 패널은 그 다음 우선순위를 가져야 한다.
 
-## 5. Core Information Model
-- Airport: `GMP` or `PUS`.
-- Language: user-selected locale.
-- Wait time: estimated or observed departure wait.
-- Operational status: normal, busy, disrupted, or maintenance.
-- Freshness: last updated time and data age.
+## 3. 핵심 사용자
+- 출국 전 공항 혼잡도를 확인하는 일반 승객
+- 언제 출발해야 할지 판단하려는 여행자
+- 공항 운영 현황을 빠르게 확인해야 하는 현장/운영 담당자
 
-## 6. User Flows
+## 4. 핵심 화면 정보 위계
+메인 화면은 아래 순서로 읽히도록 설계한다.
 
-### 6.1 First Visit
-1. User opens the service.
-2. Service shows the default airport and current wait-time card.
-3. User sees operational status, last updated time, and language control.
+1. 공항 선택 상태
+1. 현재 출발 대기시간
+1. 운영 상태
+1. 마지막 갱신 시각과 데이터 최신성
+1. 보조 정보(체크포인트, 안내 문구, 상태 참고 정보)
 
-### 6.2 Switch Airport
-1. User selects `GMP` or `PUS`.
-2. Main content updates to the selected airport.
-3. Supporting details refresh, including checkpoints or terminal-specific notes if available.
+정보 위계의 원칙은 다음과 같다.
+- 가장 중요한 숫자와 상태가 먼저 보여야 한다.
+- 보조 정보는 메인 지표를 방해하지 않아야 한다.
+- 공항별 차이점은 문구나 데이터로 드러내고, 공통 레이아웃은 유지한다.
+- 데스크톱에서는 좌측 또는 중심의 히어로 카드가 우선이며, 우측 보조 패널은 시각적으로 한 단계 낮아야 한다.
+- 모바일에서는 히어로가 화면 초반부를 대부분 차지해야 하고, 보조 패널은 아래로 자연스럽게 이어져야 한다.
 
-### 6.3 Switch Language
-1. User selects a language.
-2. All visible text updates immediately.
-3. Airport and status data remain unchanged.
+## 5. 사용자 흐름
 
-### 6.4 Check Current Guidance
-1. User reviews the main wait-time card.
-2. User checks status color and explanatory text.
-3. User reads the freshness indicator before acting on the information.
+### 5.1 최초 진입
+1. 사용자가 서비스를 연다.
+2. 기본 공항과 현재 대기시간이 보인다.
+3. 운영 상태, 마지막 갱신 시각, 언어 전환 UI가 함께 보인다.
 
-### 6.5 Error or Stale State
-1. If data cannot be loaded, user sees an error state with retry guidance.
-2. If data is old, user sees a stale-data warning and the last successful update.
-3. If airport operations are under maintenance, user sees a dedicated maintenance state.
+### 5.2 공항 전환
+1. 사용자가 `GMP` 또는 `PUS`를 선택한다.
+2. 메인 대기시간과 상태, 보조 정보가 선택한 공항 기준으로 갱신된다.
+3. 화면 구조는 유지되고 콘텐츠만 바뀐다.
+4. 공항별 데이터 필드가 다르더라도 화면은 깨지지 않아야 한다.
 
-## 7. Functional Requirements
-- The service must show a primary wait-time indicator for the selected airport.
-- The service must show operational status alongside the wait time.
-- The service must show last updated time and data freshness.
-- The service must allow airport switching between `GMP` and `PUS`.
-- The service must allow language switching without page reload.
-- The service must support loading, empty, error, stale, and maintenance states.
-- The UI must remain readable in both light and dark modes.
-- The UI must adapt cleanly across mobile, tablet, and desktop widths.
+### 5.3 언어 전환
+1. 사용자가 `KO` 또는 `EN`을 선택한다.
+2. 모든 UI 문구가 선택한 언어로 갱신된다.
+3. 공항 선택과 상태 값은 유지된다.
+4. 한국어에서 영어로 전환해도 정보 위계와 버튼 위치는 변하지 않아야 한다.
 
-## 8. MVP Scope
+### 5.4 현재 대기시간 확인
+1. 사용자가 큰 대기시간 숫자를 먼저 확인한다.
+2. 운영 상태와 설명 문구를 읽는다.
+3. 마지막 갱신 시각과 최신성 상태를 보고 신뢰도를 판단한다.
 
-### In Scope
-- Main wait-time dashboard for `GMP` and `PUS`.
-- Airport switcher.
-- Language switcher.
-- Status indicator.
-- Last updated timestamp.
-- Responsive layout.
-- Light and dark theme support.
-- Basic checkpoint or terminal detail list if data is available.
+### 5.5 오류 및 비정상 상태 확인
+1. 데이터가 없거나 실패하면 오류 상태를 본다.
+2. 데이터가 오래되면 stale 상태와 함께 마지막 성공 데이터를 본다.
+3. 유지보수 중이면 maintenance 상태를 본다.
 
-### Out of Scope
-- User accounts.
-- Push notifications.
-- Historical trends.
-- Predictive forecasting beyond current guidance.
-- Airport wayfinding maps.
-- Administrative configuration screens.
+## 6. 상태 모델
+메인 화면은 다음 상태를 명시적으로 지원해야 한다.
 
-## 9. GMP vs PUS Differences
+### 6.1 `loading`
+- 구조를 유지한 스켈레톤 또는 자리표시자를 보여준다.
+- 화면이 비어 보이지 않아야 한다.
+- 공항 전환과 언어 전환 UI는 유지되어야 한다.
 
-### 9.1 Shared Requirements
-- Same product structure, same design system, same component set.
-- Same status model and freshness rules.
-- Same multilingual and theme behavior.
+### 6.2 `empty`
+- 표시할 데이터가 없음을 짧고 명확하게 안내한다.
+- 사용자가 할 수 있는 다음 행동을 함께 제시한다.
+- 공항 전환, 재시도, 도움말 중 최소 하나의 행동을 제시해야 한다.
 
-### 9.2 Airport-Specific Differences
-- `GMP` and `PUS` may expose different terminal or checkpoint names.
-- `GMP` and `PUS` may have different peak congestion patterns and time-of-day behavior.
-- `PUS` may require more explicit international departure labeling depending on available data.
-- The UI must not hardcode airport-specific copy into shared components.
+### 6.3 `error`
+- 무엇이 실패했는지 가능한 범위에서 설명한다.
+- 재시도 또는 대체 안내를 제공한다.
+- 공항 전체 장애인지, 특정 데이터 실패인지 구분 가능한 수준의 문구가 필요하다.
 
-### 9.3 Configuration Rules
-- Airport differences must come from configuration or content data, not view logic.
-- Shared UI components should receive airport-specific labels and values as props.
-- If an airport lacks a data field, the UI must degrade gracefully without breaking layout.
+### 6.4 `stale`
+- 데이터가 오래되었음을 명확히 표시한다.
+- 마지막 성공 데이터를 유지하고, 신뢰도 저하를 분명히 보여준다.
+- 오래된 시각과 현재 시각의 차이를 사용자가 빠르게 인지할 수 있어야 한다.
 
-## 10. Acceptance Criteria
-- A user can load the service and immediately understand current departure wait guidance.
-- A user can switch between `GMP` and `PUS` and see the page update correctly.
-- A user can switch language and theme without losing the selected airport.
-- The UI clearly communicates normal, busy, stale, error, and maintenance states.
-- The product plan is detailed enough for design and implementation to proceed independently.
+### 6.5 `maintenance`
+- 서비스 또는 데이터가 유지보수 중임을 알린다.
+- 일반 콘텐츠를 유지보수 안내로 대체한다.
+- 유지보수 안내 중에도 공항 선택과 언어 전환은 가능한 상태로 남겨둘 수 있다.
+
+## 7. 기능 요구사항
+- 선택한 공항의 현재 대기시간을 메인 지표로 보여줘야 한다.
+- 운영 상태를 대기시간과 함께 즉시 파악할 수 있어야 한다.
+- 마지막 갱신 시각과 데이터 최신성을 표시해야 한다.
+- 공항 전환이 페이지 리로드 없이 동작해야 한다.
+- 언어 전환이 페이지 리로드 없이 동작해야 한다.
+- 다크모드와 라이트모드를 모두 지원해야 한다.
+- 모바일, 태블릿, 데스크톱에서 레이아웃이 깨지지 않아야 한다.
+- loading, empty, error, stale, maintenance 상태를 모두 처리해야 한다.
+
+## 8. MVP 범위
+
+### 8.1 포함 범위
+- `GMP`와 `PUS`를 지원하는 메인 대시보드
+- 공항 선택 UI
+- 언어 선택 UI
+- 대기시간 카드
+- 운영 상태 표시
+- 마지막 갱신 시각 표시
+- 체크포인트 또는 터미널 보조 정보
+- 반응형 레이아웃
+- 다크모드/라이트모드 지원
+
+### 8.2 제외 범위
+- 로그인/계정 기능
+- 푸시 알림
+- 과거 이력 그래프
+- 예측 모델 기반 추천
+- 공항 지도/길찾기
+- 관리자 설정 화면
+
+## 9. GMP와 PUS의 공통점과 차이점
+
+### 9.1 공통점
+- 같은 화면 구조를 사용한다.
+- 같은 디자인 시스템과 컴포넌트 계층을 사용한다.
+- 같은 상태 모델과 최신성 규칙을 적용한다.
+- 같은 다국어/테마 전환 경험을 제공한다.
+
+### 9.2 차이점
+- 공항별 체크포인트 명칭이 다를 수 있다.
+- 공항별 혼잡 패턴과 피크 시간대가 다를 수 있다.
+- `PUS`는 국제선 출발 맥락이 더 강하게 드러날 수 있다.
+- 노출 가능한 데이터 필드가 공항마다 다를 수 있다.
+- `GMP`는 국내선/단거리 출발 맥락이 더 강할 수 있고, `PUS`는 국제선 출발 맥락이 더 강할 수 있다.
+- 어떤 공항은 체크포인트 세부값을 제공하지 않을 수 있으므로, 요약 화면이 우선이며 보조 목록은 선택적이어야 한다.
+
+### 9.3 처리 원칙
+- 공항별 차이는 설정 또는 콘텐츠 데이터에서 온다.
+- UI 공통 컴포넌트는 공항 코드를 하드코딩하지 않는다.
+- 어떤 공항이 특정 필드를 제공하지 않아도 화면이 깨지지 않아야 한다.
+- 공항별 라벨, 상태 설명, 보조 문구는 공항 데이터가 우선하며 UI는 이를 그대로 표시할 수 있어야 한다.
+
+## 10. 다국어, 다크모드, 반응형 요구
+
+### 10.1 다국어
+- 기본 로캘은 한국어(`ko`)다.
+- 영어(`en`)는 보조 로캘이다.
+- 화면 문구는 translation 구조를 통해 관리한다.
+- 공항명, 상태 라벨, 안내 문구는 로캘에 따라 자연스럽게 바뀌어야 한다.
+- 한국어 UI는 불필요한 영문 혼용을 피하고, 버튼과 라벨은 짧고 직접적으로 유지한다.
+- 영어 UI는 보조 로캘로서 정보 구조를 바꾸지 않고 텍스트만 바꿔야 한다.
+
+### 10.2 테마
+- 라이트모드와 다크모드를 모두 지원한다.
+- 테마 전환은 레이아웃을 바꾸지 않아야 한다.
+- 숫자, 상태, 설명 텍스트의 대비는 두 테마 모두에서 읽기 쉬워야 한다.
+
+### 10.3 반응형
+- 모바일 우선으로 설계한다.
+- 모바일에서는 조작 UI가 간결해야 한다.
+- 태블릿에서는 보조 정보가 함께 보이되 과밀해 보이지 않아야 한다.
+- 데스크톱에서는 메인 히어로가 더 강하게 보이고 보조 패널은 상대적으로 낮은 우선순위를 가져야 한다.
+- 데스크톱에서는 좌측 히어로 영역이 화면의 주 시선을 담당하고, 체크포인트와 보조 설명은 우측의 보조 정보로 배치한다.
+- 폭이 넓어질수록 카드 간 간격과 내부 여백은 늘리되, 정보 밀도는 낮아져야 한다.
+
+## 11. 프론트엔드와 API 수용 기준
+
+### 11.1 프론트엔드 수용 기준
+- 사용자는 첫 화면에서 현재 공항의 대기시간을 즉시 이해할 수 있어야 한다.
+- 대기시간 숫자가 가장 먼저 눈에 들어와야 한다.
+- 공항 전환과 언어 전환이 서로의 선택 상태를 잃지 않고 동작해야 한다.
+- 운영 상태가 색상과 텍스트 모두로 전달되어야 한다.
+- 체크포인트 패널은 메인 히어로보다 덜 지배적이어야 한다.
+- 한국어 화면에서 자간이 과도하게 벌어지지 않아야 한다.
+- 상단 헤더는 공항 선택이 주 조작으로 읽히고, 언어 전환과 테마 전환은 보조 조작으로 읽혀야 한다.
+- 데스크톱에서는 대기시간 카드가 가장 큰 블록으로 보이고, 보조 패널은 그보다 작은 시각적 비중을 가져야 한다.
+- 상태가 바뀌어도 레이아웃의 뼈대는 유지되어야 한다.
+
+### 11.2 API 수용 기준
+- 프론트엔드는 공항 목록, 대기시간 요약, 체크포인트 목록, 상태/공지 정보를 안정적으로 받아야 한다.
+- 응답 스키마는 `GMP`와 `PUS` 모두에서 일관성을 유지해야 한다.
+- `waitTimeMinutes`, `status`, `freshness`, `noticeSummary` 같은 메인 정보는 프론트엔드가 히어로 영역을 구성하는 데 충분해야 한다.
+- 체크포인트가 없더라도 요약 화면은 정상 렌더링되어야 한다.
+- `stale` 또는 `maintenance` 상황을 표현할 수 있는 필드가 있어야 한다.
+- 로캘에 따라 `name`, `status.label`, `status.description`, `waitTimeLabel`이 달라질 수 있어야 한다.
+- 체크포인트가 없는 공항도 공항 선택과 메인 요약만으로 화면이 완성되어야 한다.
+
+### 11.3 계약 정합성
+- UI에 필요한 상태는 API에서 해석 가능해야 한다.
+- API는 레이아웃 결정을 내려주지 않는다.
+- UI는 API 응답이 일부 비어 있어도 점진적으로 축소된 형태로 렌더링할 수 있어야 한다.
+- 공항별 차이가 생기더라도 공통 컴포넌트 재사용은 유지되어야 한다.
+
+## 12. 완료 기준
+- 사용자는 `GMP`와 `PUS`를 전환하며 같은 구조의 화면에서 차이만 읽을 수 있어야 한다.
+- 사용자는 한국어 기본 화면에서 정보를 빠르게 이해할 수 있어야 한다.
+- 사용자는 대기시간, 운영 상태, 최신성 상태를 한 번에 확인할 수 있어야 한다.
+- 사용자는 모바일, 태블릿, 데스크톱 어디서든 같은 정보 위계를 보게 되어야 한다.
+- 디자인, 프론트엔드, 백엔드가 동일한 요구사항 문서를 기준으로 독립적으로 작업할 수 있어야 한다.
