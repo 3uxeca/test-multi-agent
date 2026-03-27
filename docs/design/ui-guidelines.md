@@ -1,57 +1,67 @@
-# UI Guidelines
+# UI 가이드라인
 
-## Purpose
-This UI is a public-facing departure wait-time guidance screen for `GMP` and `PUS`. It must be readable at a glance, resilient across mobile to desktop, and equally clear in light and dark mode.
+## 목적
+이 화면은 `GMP`와 `PUS`의 출발 대기시간을 안내하는 공공성 높은 정보 화면이다. 이동 중인 사용자가 멀리서 보아도 빠르게 이해할 수 있어야 하고, 모바일부터 데스크톱까지 같은 정보 위계를 유지해야 한다.
 
-## Core Principles
-- Put the current wait time first.
-- Make operational status impossible to miss.
-- Keep airport-specific differences config-driven, not visually hardcoded.
-- Prefer large type, short labels, and strong contrast.
-- Design for quick scanning by travelers who may be moving or standing at a distance.
+## 핵심 원칙
+- 현재 대기시간을 가장 먼저 보여준다.
+- 운영 상태는 숫자와 함께 즉시 읽혀야 한다.
+- 공항별 차이는 설정 또는 데이터로만 처리하고, 공통 레이아웃은 유지한다.
+- 한국어는 자간을 과하게 벌리지 않고, 숫자와 제목은 충분히 크게 보여준다.
+- 한국어 라벨은 영문식 전각 느낌보다 자연스러운 밀도를 우선한다.
+- 상단 헤더에서 공항 선택은 주 조작, `KO`/`EN`과 테마는 보조 조작으로 읽히게 한다.
+- 시선 이동이 적은 짧은 문장과 명확한 블록 구조를 사용한다.
 
-## Information Hierarchy
-1. Airport and terminal context.
-1. Current wait time.
-1. Status state.
-1. Last updated time.
-1. Supporting details such as checkpoints or notes.
+## 정보 위계
+1. 공항 선택 상태와 언어 맥락
+1. 현재 대기시간
+1. 운영 상태
+1. 마지막 갱신 시각과 최신성
+1. 체크포인트, 운영 참고 문구, 보조 안내
 
-## Layout Rules
-- Use a stable top area for airport, language, and theme controls.
-- Reserve the center for the wait-time hero content.
-- Place secondary details below the fold on mobile and in a side rail on desktop.
-- Keep visual density low; do not crowd status, time, and metadata into one block.
+## 레이아웃 규칙
+- 상단에는 공항 선택을 메인 조작으로 두고, 우측에는 `KO`/`EN`과 테마 전환을 압축형으로 배치한다.
+- 중앙에는 대기시간 히어로를 가장 큰 시각적 영역으로 둔다.
+- 보조 정보는 히어로보다 약한 대비와 작은 면적을 사용한다.
+- 모바일에서는 카드가 세로로 쌓이고, 데스크톱에서는 히어로와 보조 패널의 위계를 분리한다.
+- 데스크톱에서는 공항 선택이 본문 시작부에서 바로 보이게 하고, 언어와 테마는 상단 우측에 압축형으로 둔다.
+- 체크포인트 패널과 상태 보조 문구는 히어로보다 낮은 우선순위로 보여야 한다.
 
-## Responsive Behavior
-- Mobile: stacked sections, full-width cards, minimal chrome.
-- Tablet: primary content remains centered with optional supporting panel.
-- Desktop: wider grid with a dominant hero card and supporting details in columns.
-- Prevent layout shifts when switching airport, language, or theme.
+## 반응형 동작
+- 모바일: 단일 열 중심, 컨트롤은 압축형, 카드 간 간격은 넓게 유지한다.
+- 태블릿: 히어로를 중심에 두고 보조 정보는 아래 또는 옆에 제한적으로 배치한다.
+- 데스크톱: 좌측 히어로를 크게, 우측 체크포인트 패널을 작게 배치한다.
+- 공항, 언어, 테마를 전환해도 레이아웃이 흔들리지 않아야 한다.
+- 화면이 넓어질수록 히어로의 폭과 카드 내부 여백은 늘리되, 보조 패널의 존재감은 유지하되 과도하게 커지지 않아야 한다.
+- 화면이 넓어져도 공항 선택과 언어/테마 전환의 위치는 유지한다.
 
-## State Visibility
-The UI must explicitly account for:
-- loading
-- empty
-- error
-- stale data
-- maintenance
+## 상태 노출
+UI는 다음 상태를 명시적으로 다뤄야 한다.
+- `loading`
+- `empty`
+- `error`
+- `stale`
+- `maintenance`
 
-### State Priorities
-- Loading should show structured placeholders, not blank space.
-- Empty should explain what is unavailable and what the user can still do.
-- Error should identify the failure and offer retry or fallback guidance.
-- Stale data should clearly show that the data is old and may be less reliable.
-- Maintenance should replace normal content with a concise service notice.
+### 상태 우선순위
+- `loading`은 구조를 유지한 스켈레톤으로 보여준다.
+- `empty`는 무엇이 비어 있는지와 사용자가 할 수 있는 다음 행동을 함께 보여준다.
+- `error`는 실패 원인과 재시도 가능성을 짧게 안내한다.
+- `stale`은 오래된 데이터임을 분명히 알리고 마지막 값은 유지한다.
+- `maintenance`는 일반 콘텐츠를 대체하는 안내 화면으로 처리한다.
+- 상태가 바뀌어도 공항 선택과 언어 선택의 위치는 크게 바뀌지 않아야 한다.
+- 상태 화면에서도 메인 히어로와 보조 패널의 역할은 유지하거나 축소된 형태로 보여줘야 한다.
 
-## Theme Rules
-- Light mode should favor bright surfaces and restrained borders.
-- Dark mode should favor deep neutral backgrounds and muted surfaces.
-- Both themes must preserve readable contrast for large numeric values and supporting text.
-- Do not use theme as decoration; use it to preserve legibility in different environments.
+## 테마 규칙
+- 라이트모드는 밝은 바탕과 낮은 채도의 경계선을 사용한다.
+- 다크모드는 깊은 바탕과 약간 떠 있는 카드로 구성한다.
+- 두 테마 모두 대기시간 숫자, 상태 라벨, 설명 문구의 대비가 충분해야 한다.
+- 테마는 장식이 아니라 가독성 보조 수단이어야 한다.
+- 테마 전환은 시각적 밀도보다 가독성을 우선해야 한다.
 
-## Copy Rules
-- Keep airport names localized where possible.
-- Use consistent terminology for wait time and operational status.
-- Avoid long paragraphs; use short labels and concise helper text.
-- Use one primary action per state.
+## 문구 규칙
+- 기본 문구는 한국어를 우선으로 작성한다.
+- 공항명과 상태 표현은 로캘에 따라 자연스럽게 바뀌어야 한다.
+- 긴 문단보다 짧은 라벨, 짧은 설명, 명확한 보조 문구를 사용한다.
+- 주요 조작은 공항 선택, 언어 선택, 테마 전환 세 가지로 제한한다.
+- 한국어 기본 화면에서는 과한 영문 혼용, 과도한 장식성 문구, 긴 버튼 레이블을 피한다.

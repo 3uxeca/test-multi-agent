@@ -1,103 +1,117 @@
-# Components
+# 컴포넌트
 
-## Design Tokens as Component Inputs
-Every component should consume the same base tokens for color, spacing, radius, typography, and state.
-Component styling must not encode airport-specific behavior.
+## 디자인 토큰 입력 원칙
+모든 컴포넌트는 동일한 색상, 간격, 라운드, 타이포그래피, 상태 토큰을 사용해야 한다. 공항별 차이는 컴포넌트 스타일이 아니라 데이터로 들어와야 한다.
 
-## WaitTimeCard
-Primary hero component for the current wait time.
+## `WaitTimeCard`
+현재 대기시간을 보여주는 메인 히어로 컴포넌트다.
 
-### Content
-- title
-- value
-- unit
-- status
-- lastUpdated
-- note
+### 포함 정보
+- 제목
+- 대기시간 숫자
+- 단위 또는 보조 라벨
+- 상태
+- 마지막 갱신 시각
+- 짧은 설명
 
-### States
-- default
-- loading
-- empty
-- error
-- stale
-- maintenance
+### 상태
+- `default`
+- `loading`
+- `empty`
+- `error`
+- `stale`
+- `maintenance`
 
-### Notes
-- Value must be visually dominant.
-- Status should be visible without requiring color interpretation.
-- Works as a compact card on mobile and a larger hero panel on desktop.
+### 기준
+- 숫자가 가장 먼저 읽혀야 한다.
+- 상태는 색상만이 아니라 텍스트로도 읽혀야 한다.
+- 모바일에서는 한 화면에 압축되고, 데스크톱에서는 충분히 크게 보여야 한다.
+- 공항명은 상태보다 먼저 보이되, 대기시간 숫자보다 시선이 약해야 한다.
+- 카드 내부에서 대기시간 숫자는 가장 큰 단일 요소여야 한다.
+- 제목, 공항명, 상태 배지, 보조 설명은 숫자를 보조하는 역할로 제한한다.
 
-## StatusBadge
-Compact indicator for operational status.
+## `StatusBadge`
+운영 상태를 간단히 보여주는 배지다.
 
-### Variants
-- smooth
-- moderate
-- crowded
-- info
+### 변형
+- `smooth`
+- `moderate`
+- `crowded`
+- `info`
 
-### Behavior
-- Always pair badge text with a tone or icon.
-- Support both dense and spacious layouts.
+### 기준
+- 라벨은 짧고 직접적이어야 한다.
+- 색상과 필요 시 아이콘이 함께 쓰여야 한다.
+- 히어로 카드 안에서 너무 지배적이면 안 된다.
+- 상태 배지는 대기시간 숫자를 보조하는 역할로 유지한다.
+- 상태 배지는 `loading`/`stale`/`maintenance` 같은 시스템 상태와 혼동되지 않게 문구를 짧게 유지한다.
 
-## AirportSelector
-Airport switcher for GMP and PUS.
+## `AirportSelector`
+`GMP`와 `PUS`를 전환하는 공항 선택 UI다.
 
-### Behavior
-- Must clearly show the active airport.
-- Should support compact display on mobile and richer display on desktop.
-- Selection changes should preserve page state where possible.
+### 기준
+- 활성 공항이 즉시 구분되어야 한다.
+- 모바일에서는 압축형, 데스크톱에서는 여유 있는 형태를 사용한다.
+- 전환 시 다른 상태나 선택값은 유지되어야 한다.
+- 메인 헤더 안에서 가장 먼저 조작하는 선택 요소로 보이게 한다.
+- 공항 코드와 공항명/힌트를 함께 쓰는 경우, 코드는 식별자이고 힌트는 보조 설명으로 읽혀야 한다.
 
-## LanguageSelector
-Language switching control.
+## `LanguageSelector`
+언어 전환 UI다.
 
-### Behavior
-- Must show the currently active language.
-- Keep labels short so the control stays usable in narrow viewports.
+### 기준
+- 현재 언어가 분명히 보여야 한다.
+- `KO` / `EN`처럼 짧은 라벨을 사용한다.
+- 상단 우측의 보조 조작으로 보이게 한다.
+- 공항 선택보다 시각적 우선순위가 낮아야 한다.
+- 활성 상태는 단순한 색상 변화만이 아니라 눌린 상태로도 구분되어야 한다.
 
-## ThemeToggle
-Light and dark mode switch.
+## `ThemeToggle`
+라이트/다크 전환 UI다.
 
-### Behavior
-- Must be obvious and accessible in both themes.
-- Should not compete with the main wait-time content.
+### 기준
+- 아이콘 중심으로 간결하게 보이게 한다.
+- 접근성 라벨은 유지한다.
+- 메인 히어로보다 시각적으로 약해야 한다.
+- 언어 전환과 같은 수준의 보조 조작으로 다룬다.
+- 텍스트 버튼보다 시각적 크기를 줄여도, 툴팁이나 `aria-label`로 의도를 분명히 전달해야 한다.
 
-## RefreshStatus
-Small utility component for freshness and last updated metadata.
+## `RefreshStatus`
+최신성과 마지막 갱신 시각을 보여주는 보조 컴포넌트다.
 
-### Content
-- lastUpdated
-- freshnessLabel
-- refreshHint
+### 포함 정보
+- `lastUpdated`
+- `freshnessLabel`
+- `refreshHint`
 
-### States
-- fresh
-- stale
-- syncing
+### 상태
+- `fresh`
+- `stale`
+- `syncing`
 
-## ErrorNotice
-Used when the data source or display state fails.
+## `ErrorNotice`
+데이터 또는 화면 상태가 실패했을 때 사용하는 안내 컴포넌트다.
 
-### Content
-- title
-- message
-- retryAction
-- fallbackHint
+### 포함 정보
+- 제목
+- 설명
+- 재시도 동작
+- 대체 안내
 
-## MaintenanceNotice
-Used when the service is intentionally unavailable.
+## `MaintenanceNotice`
+서비스가 유지보수 중일 때 사용하는 안내 컴포넌트다.
 
-### Content
-- title
-- message
-- expectedReturn
-- alternativeGuidance
+### 포함 정보
+- 제목
+- 설명
+- 예상 복구 시각 또는 상태
+- 대체 안내
 
-## CheckpointList
-Supporting list for checkpoint or step-based context.
+## `CheckpointList`
+체크포인트 또는 단계성 정보를 보여주는 보조 목록이다.
 
-### Behavior
-- Keep entries short.
-- Collapse gracefully on mobile.
-- Preserve readability with generous spacing and simple separators.
+### 기준
+- 항목은 짧게 유지한다.
+- 모바일에서는 자연스럽게 세로로 쌓인다.
+- 간격을 넉넉히 두고 읽기 쉽게 만든다.
+- 체크포인트가 없을 때도 목록 자리 자체는 유지하거나 대체 문구로 축소되어야 한다.

@@ -1,59 +1,70 @@
-# Wireframes
+# 와이어프레임
 
-## Main Screen
+## 메인 화면
 
-### Shared Structure
-- Top bar: airport selector, language selector, theme toggle.
-- Hero area: wait time, status, and a short description.
-- Detail area: checkpoint list, operational notes, and last updated time.
-- Utility area: refresh, retry, and help cues when needed.
+### 공통 구조
+- 상단 바: 우측 상단에 언어 선택과 테마 전환, 메인 헤더에 공항 선택.
+- 히어로 영역: 대기시간 숫자, 상태 배지, 짧은 설명.
+- 보조 영역: 체크포인트 목록, 운영 참고, 마지막 갱신 시각.
+- 상태 영역: 필요할 때만 재시도, 도움말, 유지보수 안내를 보여준다.
 
-### Mobile
-- Header stays compact and sticky.
-- Hero card occupies most of the first viewport.
-- Secondary details stack below the hero.
-- Controls collapse into compact buttons or segmented selectors.
+### 모바일
+- 헤더는 압축형으로 유지하고 스크롤 중에도 큰 흐름이 보이게 한다.
+- 히어로 카드가 첫 화면의 대부분을 차지한다.
+- 보조 정보는 히어로 아래에 순서대로 쌓인다.
+- 언어와 테마는 작은 버튼 형태로 노출한다.
+- 공항 선택은 여전히 첫 조작으로 인식되어야 한다.
 
-### Tablet
-- Header remains visible with larger control targets.
-- Hero card stays centered and wider.
-- Supporting details appear below in two stacked sections or a 2-column split.
+### 태블릿
+- 헤더는 계속 보이되 조작 영역이 너무 넓지 않게 한다.
+- 히어로는 화면 중앙에서 가장 넓게 보인다.
+- 체크포인트와 안내 문구는 아래에 2열 또는 제한적 1열로 배치한다.
+- 언어와 테마는 기능은 유지하되 시각적 존재감은 낮춘다.
 
-### Desktop
-- Header spans the top with controls aligned to the right.
-- Hero card occupies the main left or center area.
-- Supporting panel shows checkpoints, notes, and state messaging.
-- Layout should not feel empty on wide screens; use balanced columns and restrained whitespace.
+### 데스크톱
+- 헤더 상단 오른쪽에는 언어와 테마 전환을 두고, 공항 선택은 본문 시작 부분에 둔다.
+- 좌측 히어로 카드가 가장 크고 강하게 보인다.
+- 우측 보조 패널은 체크포인트와 상태 참고만 담는다.
+- 넓은 화면에서 빈 공간이 많아 보이지 않도록 카드 간 균형을 유지한다.
+- 히어로 카드의 시각적 무게가 보조 패널보다 확실히 커야 한다.
+- 공항 선택 영역은 본문 시작점에서 즉시 보이게 하고, 보조 패널은 보더와 면적으로만 구분한다.
 
-## Primary State Wireframes
+## 상태별 와이어프레임
 
-### Normal
-- Airport and language are visible.
-- Wait time is the visual focus.
-- Status badge appears next to or below the numeric time.
-- Last updated time is visible but secondary.
+### 정상
+- 공항명과 언어 맥락이 먼저 보인다.
+- 대기시간 숫자가 가장 눈에 띄어야 한다.
+- 상태 배지는 숫자 근처에 위치한다.
+- 마지막 갱신 시각은 보조 정보로 보인다.
 
-### Loading
-- Replace content with skeleton placeholders that preserve layout.
-- Keep header controls visible.
+### `loading`
+- 기존 레이아웃 자리에 스켈레톤을 넣는다.
+- 헤더와 주요 구조는 유지한다.
+- 공항 선택과 언어/테마 조작은 노출 상태를 유지한다.
+- 메인 히어로의 실루엣이 사라지지 않도록 영역 크기를 유지한다.
 
-### Empty
-- Show a short explanation that data is unavailable.
-- Preserve controls so the user can switch airport, language, or retry.
+### `empty`
+- 데이터가 비어 있음을 짧게 안내한다.
+- 공항 전환과 언어 전환은 계속 가능해야 한다.
+- 가능한 경우 공항 전환 후 다시 확인하라는 행동 유도가 포함되어야 한다.
 
-### Error
-- Explain what failed in plain language.
-- Provide retry and fallback guidance.
+### `error`
+- 무엇이 실패했는지 짧은 문장으로 보여준다.
+- 재시도 동작이 보이도록 한다.
+- 오류는 요약 실패, 체크포인트 실패, 전체 장애처럼 성격이 분리되어 읽힐 수 있으면 좋다.
 
-### Stale Data
-- Surface a visible freshness warning.
-- Keep the last known value on screen with a clear stale label.
+### `stale`
+- 오래된 데이터라는 경고를 시각적으로 분리한다.
+- 마지막 값은 유지하되 신뢰도 저하를 분명히 표시한다.
+- 오래된 시각은 강조하되, 숫자와 핵심 상태는 여전히 읽히게 둔다.
 
-### Maintenance
-- Replace the main content with a service notice.
-- Keep airport and language controls accessible.
+### `maintenance`
+- 일반 콘텐츠를 유지보수 안내로 대체한다.
+- 공항 전환과 언어 전환은 숨기지 않는다.
+- 보조 패널이 비어 있더라도 메인 히어로와 상단 조작은 유지한다.
+- 유지보수 안내는 짧고 직접적으로 보여야 하며, 불필요한 설명은 줄인다.
 
-## Airport Comparison Notes
-- GMP and PUS should share the same layout structure.
-- Any difference between airports should appear as content, labels, or config-driven metadata rather than layout divergence.
-- The screen must still feel consistent when switching airports.
+## 공항 비교 메모
+- `GMP`와 `PUS`는 동일한 화면 구조를 사용한다.
+- 차이는 체크포인트 이름, 안내 문구, 상태 설명처럼 콘텐츠로 드러난다.
+- 공항이 바뀌어도 화면의 중심은 항상 대기시간 히어로여야 한다.
