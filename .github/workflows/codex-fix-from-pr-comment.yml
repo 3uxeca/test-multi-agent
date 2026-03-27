@@ -2,6 +2,11 @@ name: Codex Fix From PR Comment
 
 on:
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "수동 디버깅에 사용할 PR 번호"
+        required: true
+        type: string
   issue_comment:
     types: [created, edited]
 
@@ -13,8 +18,11 @@ permissions:
 jobs:
   codex-fix:
     if: >
-      github.event.issue.pull_request &&
-      contains(github.event.comment.body, '/codex-fix')
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.issue.pull_request &&
+        contains(github.event.comment.body, '/codex-fix')
+      )
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +31,10 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
+            const issue_number =
+              context.eventName === 'workflow_dispatch'
+                ? Number('${{ inputs.pr_number }}')
+                : context.issue.number;
 
             await github.rest.issues.createComment({
               owner,
@@ -34,6 +45,7 @@ jobs:
                 '',
                 `- event: ${context.eventName}`,
                 `- action: ${context.payload.action}`,
+                `- pr number: ${issue_number}`,
                 `- comment id: ${context.payload.comment?.id ?? 'n/a'}`,
                 `- comment body: ${context.payload.comment?.body ?? 'n/a'}`,
                 '',
@@ -47,7 +59,10 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
+            const issue_number =
+              context.eventName === 'workflow_dispatch'
+                ? Number('${{ inputs.pr_number }}')
+                : context.issue.number;
             const pr = await github.rest.pulls.get({
               owner,
               repo,
@@ -76,7 +91,10 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
+            const issue_number =
+              context.eventName === 'workflow_dispatch'
+                ? Number('${{ inputs.pr_number }}')
+                : context.issue.number;
 
             const issueComments = await github.paginate(
               github.rest.issues.listComments,
@@ -152,7 +170,10 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
+            const issue_number =
+              context.eventName === 'workflow_dispatch'
+                ? Number('${{ inputs.pr_number }}')
+                : context.issue.number;
 
             await github.rest.issues.createComment({
               owner,
@@ -178,7 +199,10 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
+            const issue_number =
+              context.eventName === 'workflow_dispatch'
+                ? Number('${{ inputs.pr_number }}')
+                : context.issue.number;
 
             await github.rest.issues.createComment({
               owner,
