@@ -26,11 +26,15 @@ const initialLocale = (): Locale => {
 export default function HomePage() {
   const [airportCode, setAirportCode] = useState<AirportCode>("GMP");
   const [theme, setTheme] = useState<ThemeMode>("dark");
-  const [locale, setLocale] = useState<Locale>(() => initialLocale());
+  const [locale, setLocale] = useState<Locale>(defaultLocale);
   const t = getTranslations(locale);
 
   useEffect(() => {
     setTheme(initialTheme());
+  }, []);
+
+  useEffect(() => {
+    setLocale(initialLocale());
   }, []);
 
   useEffect(() => {
