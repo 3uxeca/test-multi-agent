@@ -13,6 +13,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang={defaultLocale} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var root=document.documentElement;var storedTheme=localStorage.getItem("theme");var theme=storedTheme==="light"||storedTheme==="dark"?storedTheme:(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");root.dataset.theme=theme;root.style.colorScheme=theme;var storedLocale=localStorage.getItem("locale");root.lang=storedLocale==="en"||storedLocale==="ko"?storedLocale:"${defaultLocale}";}catch(e){}})();`
+          }}
+        />
+      </head>
       <body className="antialiased">
         {children}
       </body>

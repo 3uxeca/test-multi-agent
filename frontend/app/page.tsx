@@ -27,14 +27,13 @@ export default function HomePage() {
   const [airportCode, setAirportCode] = useState<AirportCode>("GMP");
   const [theme, setTheme] = useState<ThemeMode>("dark");
   const [locale, setLocale] = useState<Locale>(defaultLocale);
+  const [controlsReady, setControlsReady] = useState(false);
   const t = getTranslations(locale);
 
   useEffect(() => {
     setTheme(initialTheme());
-  }, []);
-
-  useEffect(() => {
     setLocale(initialLocale());
+    setControlsReady(true);
   }, []);
 
   useEffect(() => {
@@ -58,31 +57,25 @@ export default function HomePage() {
     <main className="min-h-screen bg-[color:var(--bg-surface)] text-[color:var(--text-primary)]">
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
         <header className="sticky top-4 z-20 rounded-[30px] border border-[color:var(--border-subtle)] bg-[color:var(--bg-card)] px-4 py-4 backdrop-blur-xl sm:px-6 sm:py-5">
-          <div className="flex flex-col gap-5">
-            <div className="flex items-start justify-end gap-2">
-              <LanguageSwitcher value={locale} onChange={setLocale} labels={t.languageSwitcher} />
-              <ThemeToggle value={theme} onChange={setTheme} labels={t.themeToggle} />
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+            <div className="max-w-4xl">
+              <p className={[
+                "text-sm font-semibold text-[color:var(--text-secondary)] sm:text-[15px]",
+                locale === "ko" ? "tracking-normal" : "uppercase tracking-[0.28em]"
+              ].join(" ")}>
+                {t.page.kicker}
+              </p>
+              <h1 className="mt-3 font-display text-[2.25rem] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-5xl lg:text-[3.8rem]">
+                {t.page.title}
+              </h1>
             </div>
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
-              <div className="max-w-4xl">
-                <p className={[
-                  "text-sm font-semibold text-[color:var(--text-secondary)] sm:text-[15px]",
-                  locale === "ko" ? "tracking-normal" : "uppercase tracking-[0.28em]"
-                ].join(" ")}>
-                  {t.page.kicker}
-                </p>
-                <h1 className="mt-3 font-display text-[2.25rem] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-5xl lg:text-[3.8rem]">
-                  {t.page.title}
-                </h1>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <AirportSwitcher
-                  value={airportCode}
-                  onChange={setAirportCode}
-                  labels={t.airportSwitcher}
-                  locale={locale}
-                />
-              </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <AirportSwitcher
+                value={airportCode}
+                onChange={setAirportCode}
+                labels={t.airportSwitcher}
+                locale={locale}
+              />
             </div>
           </div>
         </header>
@@ -167,6 +160,19 @@ export default function HomePage() {
             </section>
           </aside>
         </section>
+      </div>
+
+      <div className="pointer-events-none fixed inset-x-4 bottom-4 z-30 flex justify-center sm:inset-x-auto sm:right-6 sm:justify-end lg:right-8">
+        <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-card)] p-2 shadow-glow backdrop-blur-xl">
+          {controlsReady ? (
+            <>
+              <LanguageSwitcher value={locale} onChange={setLocale} labels={t.languageSwitcher} />
+              <ThemeToggle value={theme} onChange={setTheme} labels={t.themeToggle} />
+            </>
+          ) : (
+            <div className="h-10 w-[118px] rounded-full bg-[color:var(--bg-surface)]" aria-hidden="true" />
+          )}
+        </div>
       </div>
     </main>
   );
