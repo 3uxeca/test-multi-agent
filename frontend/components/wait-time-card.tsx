@@ -12,6 +12,49 @@ interface WaitTimeCardProps {
 
 export function WaitTimeCard({ airport, locale, labels }: WaitTimeCardProps) {
   const isKorean = locale === "ko";
+  const dataState = airport.dataState ?? "default";
+  const isStateScreen = dataState === "loading" || dataState === "empty" || dataState === "error" || dataState === "maintenance";
+  const staleCopy = labels.mainStates.stale;
+
+  if (isStateScreen) {
+    const stateCopy = labels.mainStates[dataState];
+
+    return (
+      <section className="overflow-hidden rounded-[34px] border border-[color:var(--border-subtle)] bg-[color:var(--bg-card)] p-6 shadow-glow md:p-8 lg:p-10">
+        <div className="flex min-h-[420px] flex-col justify-between gap-8 rounded-[30px] bg-[color:var(--bg-surface)] p-6 md:p-8">
+          <div>
+            <p className={[
+              "text-sm font-semibold text-[color:var(--text-secondary)] sm:text-[15px]",
+              isKorean ? "tracking-normal" : "uppercase tracking-[0.16em]"
+            ].join(" ")}>
+              {airport.terminalLabel}
+            </p>
+            <h2 className="mt-4 max-w-3xl text-[2.2rem] font-semibold leading-[1.08] tracking-[-0.04em] text-[color:var(--text-primary)] md:text-[3.3rem]">
+              {stateCopy.title}
+            </h2>
+            <p className="mt-5 max-w-2xl text-[16px] leading-8 text-[color:var(--text-secondary)] md:text-[17px]">
+              {stateCopy.body}
+            </p>
+          </div>
+          <div className="rounded-[22px] border border-[color:var(--border-subtle)] bg-[color:var(--bg-card)] p-5 md:p-6">
+            <p className={[
+              "text-sm font-semibold text-[color:var(--text-secondary)] sm:text-[15px]",
+              isKorean ? "tracking-normal" : "uppercase tracking-[0.14em]"
+            ].join(" ")}>
+              {labels.lastUpdatedLabel}
+            </p>
+            <p className="mt-3 text-[16px] font-semibold leading-7 text-[color:var(--text-primary)] md:text-[17px]">
+              {new Intl.DateTimeFormat(locale === "ko" ? "ko-KR" : "en-US", {
+                dateStyle: "medium",
+                timeStyle: "short"
+              }).format(new Date(airport.updatedAt))}
+            </p>
+            <p className="mt-2 text-sm text-[color:var(--text-secondary)]">{airport.freshnessLabel}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="overflow-hidden rounded-[34px] border border-[color:var(--border-subtle)] bg-[color:var(--bg-card)] p-6 shadow-glow md:p-8 lg:p-10">
@@ -32,6 +75,12 @@ export function WaitTimeCard({ airport, locale, labels }: WaitTimeCardProps) {
         </div>
 
         <div className="rounded-[30px] bg-[color:var(--bg-surface)] p-6 md:p-7 lg:p-8">
+          {dataState === "stale" ? (
+            <div className="mb-5 rounded-[20px] border border-[color:var(--status-info-border)] bg-[color:var(--status-info-bg)] px-4 py-3">
+              <p className="text-[14px] font-semibold leading-6 text-[color:var(--status-info-text)]">{staleCopy.title}</p>
+              <p className="mt-1 text-[14px] leading-6 text-[color:var(--status-info-text)]/80">{staleCopy.body}</p>
+            </div>
+          ) : null}
           <p className={[
             "text-sm font-semibold text-[color:var(--text-secondary)] sm:text-[15px]",
             isKorean ? "tracking-normal" : "uppercase tracking-[0.16em]"

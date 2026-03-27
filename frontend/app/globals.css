@@ -9,6 +9,18 @@
   --text-secondary: #5f5b56;
   --border-subtle: rgba(21, 21, 21, 0.1);
   --accent: #0f766e;
+  --status-smooth-border: rgba(5, 150, 105, 0.22);
+  --status-smooth-bg: rgba(16, 185, 129, 0.1);
+  --status-smooth-text: #047857;
+  --status-moderate-border: rgba(217, 119, 6, 0.24);
+  --status-moderate-bg: rgba(245, 158, 11, 0.12);
+  --status-moderate-text: #b45309;
+  --status-crowded-border: rgba(225, 29, 72, 0.2);
+  --status-crowded-bg: rgba(244, 63, 94, 0.1);
+  --status-crowded-text: #be123c;
+  --status-info-border: rgba(2, 132, 199, 0.2);
+  --status-info-bg: rgba(14, 165, 233, 0.12);
+  --status-info-text: #0369a1;
   --font-display: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
   --font-body: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
 }
@@ -20,6 +32,18 @@
   --text-secondary: #9ba9bd;
   --border-subtle: rgba(159, 174, 194, 0.16);
   --accent: #2dd4bf;
+  --status-smooth-border: rgba(52, 211, 153, 0.28);
+  --status-smooth-bg: rgba(16, 185, 129, 0.16);
+  --status-smooth-text: #a7f3d0;
+  --status-moderate-border: rgba(251, 191, 36, 0.3);
+  --status-moderate-bg: rgba(245, 158, 11, 0.18);
+  --status-moderate-text: #fde68a;
+  --status-crowded-border: rgba(251, 113, 133, 0.28);
+  --status-crowded-bg: rgba(244, 63, 94, 0.18);
+  --status-crowded-text: #fecdd3;
+  --status-info-border: rgba(56, 189, 248, 0.28);
+  --status-info-bg: rgba(14, 165, 233, 0.18);
+  --status-info-text: #bae6fd;
 }
 
 html {

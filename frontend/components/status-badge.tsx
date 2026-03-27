@@ -8,15 +8,20 @@ interface StatusBadgeProps {
 }
 
 const toneStyles: Record<StatusTone, string> = {
-  smooth: "border-emerald-500/30 bg-emerald-500/12 text-emerald-200",
-  moderate: "border-amber-500/30 bg-amber-500/12 text-amber-200",
-  crowded: "border-rose-500/30 bg-rose-500/12 text-rose-200",
-  info: "border-sky-500/30 bg-sky-500/12 text-sky-200"
+  smooth: "var(--status-smooth-border)|var(--status-smooth-bg)|var(--status-smooth-text)",
+  moderate: "var(--status-moderate-border)|var(--status-moderate-bg)|var(--status-moderate-text)",
+  crowded: "var(--status-crowded-border)|var(--status-crowded-bg)|var(--status-crowded-text)",
+  info: "var(--status-info-border)|var(--status-info-bg)|var(--status-info-text)"
 };
 
 export function StatusBadge({ tone, label }: StatusBadgeProps) {
+  const [borderColor, backgroundColor, color] = toneStyles[tone].split("|");
+
   return (
-    <span className={`inline-flex items-center rounded-full border px-4 py-2.5 text-base font-semibold leading-none tracking-tight md:px-5 md:text-lg ${toneStyles[tone]}`}>
+    <span
+      className="inline-flex items-center rounded-full border px-4 py-2.5 text-base font-semibold leading-none tracking-tight md:px-5 md:text-lg"
+      style={{ borderColor, backgroundColor, color }}
+    >
       {label}
     </span>
   );

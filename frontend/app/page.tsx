@@ -48,6 +48,7 @@ export default function HomePage() {
 
   const airportProfiles = getAirportProfiles(locale);
   const airport = airportProfiles[airportCode];
+  const hasCheckpoints = airport.checkpoints.length > 0;
 
   return (
     <main className="min-h-screen bg-[color:var(--bg-surface)] text-[color:var(--text-primary)]">
@@ -122,22 +123,29 @@ export default function HomePage() {
               ].join(" ")}>
                 {t.page.checkpointsTitle}
               </p>
-              <div className="mt-3 grid gap-2.5">
-                {airport.checkpoints.map((checkpoint) => (
-                  <div
-                    key={checkpoint.name}
-                    className="rounded-[20px] border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] p-3.5"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-[1rem] font-semibold tracking-tight">{checkpoint.name}</p>
-                        <p className="mt-1 text-[14px] leading-6 text-[color:var(--text-secondary)]">{checkpoint.note}</p>
+              {hasCheckpoints ? (
+                <div className="mt-3 grid gap-2.5">
+                  {airport.checkpoints.map((checkpoint) => (
+                    <div
+                      key={checkpoint.name}
+                      className="rounded-[20px] border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] p-3.5"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-[1rem] font-semibold tracking-tight">{checkpoint.name}</p>
+                          <p className="mt-1 text-[14px] leading-6 text-[color:var(--text-secondary)]">{checkpoint.note}</p>
+                        </div>
+                        <p className="shrink-0 text-[14px] font-semibold tracking-tight text-[color:var(--text-primary)]">{checkpoint.wait}</p>
                       </div>
-                      <p className="shrink-0 text-[14px] font-semibold tracking-tight text-[color:var(--text-primary)]">{checkpoint.wait}</p>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-3 rounded-[20px] border border-dashed border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] p-4">
+                  <p className="text-[15px] font-semibold text-[color:var(--text-primary)]">{t.page.checkpointsEmptyTitle}</p>
+                  <p className="mt-2 text-[14px] leading-6 text-[color:var(--text-secondary)]">{t.page.checkpointsEmptyBody}</p>
+                </div>
+              )}
             </section>
 
             <section className="rounded-[28px] border border-[color:var(--border-subtle)] bg-[color:var(--bg-card)] p-4 sm:p-5">

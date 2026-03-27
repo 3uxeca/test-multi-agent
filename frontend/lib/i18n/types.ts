@@ -21,6 +21,20 @@ export interface WaitTimeCardText {
   waitLabel: string;
   lastUpdatedLabel: string;
   operationalNoteLabel: string;
+  mainStates: MainStatesText;
+}
+
+export interface MainStateCopy {
+  title: string;
+  body: string;
+}
+
+export interface MainStatesText {
+  loading: MainStateCopy;
+  empty: MainStateCopy;
+  error: MainStateCopy;
+  stale: MainStateCopy;
+  maintenance: MainStateCopy;
 }
 
 export interface PageText {
@@ -31,8 +45,11 @@ export interface PageText {
   quickStatusTitle: string;
   quickStatusBody: string;
   checkpointsTitle: string;
+  checkpointsEmptyTitle: string;
+  checkpointsEmptyBody: string;
   layoutNotesTitle: string;
   layoutNotes: string[];
+  mainStates: MainStatesText;
 }
 
 export interface AppTranslations {

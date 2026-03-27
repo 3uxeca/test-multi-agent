@@ -2,6 +2,7 @@ export type AirportCode = "GMP" | "PUS";
 export type ThemeMode = "light" | "dark";
 export type StatusTone = "smooth" | "moderate" | "crowded" | "info";
 export type Locale = "ko" | "en";
+export type DataState = "default" | "loading" | "empty" | "error" | "stale" | "maintenance";
 
 export interface CheckpointInfo {
   name: string;
@@ -22,4 +23,5 @@ export interface AirportProfile {
   summary: string;
   note: string;
   checkpoints: CheckpointInfo[];
+  dataState?: DataState;
 }
