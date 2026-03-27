@@ -1,5 +1,12 @@
 # AGENTS.md
 
+## Language Rules
+- 기본 작업 언어는 한국어다.
+- All agent responses, summaries, and documents must be written in Korean.
+- UI 기본 문구는 한국어를 우선한다.
+- 다국어 지원 시 한국어를 기본 로캘로 한다.
+- Code identifiers, file names, and library names can remain in English.
+
 ## Project Overview
 This project is a new system for:
 Gimpo / Gimhae International Departure Wait Time Guidance Service.
